@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../lib/bootstrap.min.css">
+    <link rel="stylesheet" href="popup.css">
+    <title>Hello, world!</title>
+</head>
+<body>
+<div class="p-4">
+    <p class="h5">Source language</p>
+    <select
+            class="select-style"
+            style="margin-bottom: 2rem;"
+            id="source-language"
+    >
+        <option>Detect language</option>
+    </select>
+
+    <p class="h5">Translated language</p>
+    <select
+            class="select-style"
+            id="translated-language"
+    >
+        <option>Please select a language</option>
+    </select>
+</div>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="../lib/jquery.min.js"></script>
+<script src="../lib/popper.min.js"></script>
+<script src="../lib/bootstrap.min.js"></script>
+<script src="../content-scripts/constant.js"></script>
+<script src="popup.js"></script>
+</body>
+</html>

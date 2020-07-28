@@ -39,21 +39,33 @@ function isSourceOrTarget(node) {
 	return node.getAttribute('data-test');
 }
 
+function setResult(result) {
+	const targetNode = $(parentOfCurrentNode).next();
+	targetNode.find('.l-content-editor').html('');
+	targetNode.find('.l-content-editor')
+		.append(`<span class="l-content-editor__text">${result}</span>`)
+}
 function handleNodeClick() {
-	selectText(currentNode);
-	document.execCommand('copy');
-	chrome.runtime.sendMessage({
-		name: START_TRANSLATE,
-		data: currentNode.innerText
-	}, function (response) {
-		let result = response.translationResult[0];
-		if (!result)
-			result = `<p style="color: red">${DEFAULT_ERROR_TEXT}</p>`;
-		const targetNode = $(parentOfCurrentNode).next();
-		targetNode.find('.l-content-editor').html('');
-		targetNode.find('.l-content-editor')
-			.append(`<span class="l-content-editor__text">${result}</span>`)
+	chrome.storage.local.get(null, function(language) {
+		const translatedLanguage = language[translateLanguageKey];
+		if (!translatedLanguage) {
+			setResult(`<p style="color: red">${NOT_YET_PICK_TRANSLATE_LANGUAGE_ERROR_TEXT}</p>`);
+			return;
+		}
+		selectText(currentNode);
+		document.execCommand('copy');
+		chrome.runtime.sendMessage({
+			name: START_TRANSLATE,
+			data: currentNode.innerText,
+			translatedLanguage
+		}, function (response) {
+			let result = response.translationResult[0];
+			if (!result)
+				result = `<p style="color: red">${DEFAULT_ERROR_TEXT}</p>`;
+			setResult(result);
+		})
 	})
+	
 }
 
 setInterval(function(){
