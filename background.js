@@ -22,18 +22,26 @@ function handleCallback(sendResponse, translationResult) {
 	})
 }
 
-function formGoogleTranslateUrl(translatedLanguage, data) {
-	let rootUrl = GOOGLE_TRANS_ROOT_URL.replace('&tl=', `&tl=${translatedLanguage}`);
-	return rootUrl + data;
+function formGoogleTranslateUrl(sourceLanguage, translatedLanguage, query) {
+	let rootUrl = GOOGLE_TRANS_ROOT_URL
+		.replace('&tl=', `&tl=${translatedLanguage}`)
+		.replace('$sl=', `&sl=${sourceLanguage}`);
+	return rootUrl + query;
 }
 
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse){
+	if (message.name === OPEN_POPUP_MSG) {
+		chrome.tabs.create({ url: "popup/popup.html" });
+		return;
+	}
 	chrome.tabs.query({
 		currentWindow: true
 	}, function(tabs) {
 		let googleTranslateTab = tabs.find(tab => tab.url.includes('translate.google.'))
 		const currentTabId = tabs.find(tab => tab.active === true).id;
-		const url = formGoogleTranslateUrl(message.translatedLanguage, message.data);
+		const url = formGoogleTranslateUrl(
+			message.sourceLanguage, message.translatedLanguage, message.data
+		);
 		if (googleTranslateTab) {
 			timeOut = 500;
 			chrome.tabs.update(googleTranslateTab.id, {
@@ -43,7 +51,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse){
 				getResult(sendResponse, currentTabId);
 			});
 		} else {
-			timeOut = 1000;
+			timeOut = 1500;
 			chrome.tabs.create({
 				url
 			}, function () {

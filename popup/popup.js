@@ -2,6 +2,10 @@
 function loadData() {
 	// Load saved option of languages from storage
 	chrome.storage.local.get(null, function(result) {
+		const appState = result[APP_STATE_KEY];
+		const value =  appState === APP_STATE_OFF ? false : true;
+		$('#switch')[0].checked = value;
+		
 		const sourceLanguage = result[sourceLanguageKey];
 		if (sourceLanguage)
 			$('#source-language').val(codeToLanguageMaps[sourceLanguage]);
@@ -13,11 +17,18 @@ function loadData() {
 }
 
 function bindChange() {
+	$('#switch')[0].onchange = function(e) {
+		chrome.storage.local.set({
+			[APP_STATE_KEY]: e.target.checked ? APP_STATE_ON : APP_STATE_OFF
+		})
+	};
+	
 	$('#source-language').change(function(event){
 		chrome.storage.local.set({
 			[sourceLanguageKey]: languageToCodeMaps[event.target.value]
 		});
 	});
+	
 	$('#translated-language').change(function(event){
 		const code = languageToCodeMaps[event.target.value];
 		if (code)
