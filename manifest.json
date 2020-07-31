@@ -1,7 +1,7 @@
 {
   "name": "Smartcat translation helper",
-  "version": "0.2",
-  "description": "Quickly prefill target with Google translation text",
+  "version": "0.3",
+  "description": "Instantly fill target box of Smartcat with Google translation text",
   "permissions": [
     "tabs",
     "activeTab",
