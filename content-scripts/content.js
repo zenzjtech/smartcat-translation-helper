@@ -1,5 +1,7 @@
 // interval to enable confirmation of result
 let it;
+let currentTranslatedText;
+
 function selectText(node) {
 	if (document.body.createTextRange) {
 		const range = document.body.createTextRange();
@@ -55,6 +57,7 @@ function setResult(result) {
 	}, 100)
 }
 function handleNodeClick() {
+	log("prepare to query");
 	chrome.storage.local.get(null, function(data) {
 		const appState = data[APP_STATE_KEY];
 		if (appState === APP_STATE_OFF)
@@ -79,6 +82,8 @@ function handleNodeClick() {
 			let result = response.translationResult[0];
 			if (!result)
 				result = `<p style="color: red">${DEFAULT_ERROR_TEXT}</p>`;
+			currentTranslatedText = result;
+			chrome.storage.local.set({[CURRENT_TRANSLATED_TEXT_KEY]: currentTranslatedText});
 			setResult(result);
 		})
 	})
