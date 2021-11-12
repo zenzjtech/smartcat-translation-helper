@@ -1,6 +1,6 @@
 {
   "name": "Smartcat translation helper",
-  "version": "0.3",
+  "version": "0.4",
   "description": "Instantly fill target box of Smartcat with Google translation text",
   "permissions": [
     "tabs",
