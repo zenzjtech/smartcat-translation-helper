@@ -1,4 +1,4 @@
-const getTranslationResultScript = `document.querySelector("body > div.container > div.frame > div.page.tlid-homepage.homepage.translate-text > div.homepage-content-wrap > div.tlid-source-target.main-header > div.source-target-row > div.tlid-results-container.results-container > div.tlid-result.result-dict-wrapper > div.result.tlid-copy-target > div.text-wrap.tlid-copy-target > div > span.tlid-translation.translation").innerText`;
+const getTranslationResultScript = `document.querySelector("#yDmH0d > c-wiz > div > div.WFnNle > c-wiz > div.OlSOob > c-wiz > div.ccvoYb > div.AxqVh > div.OPPzxe > c-wiz.P6w8m.BDJ8fb > div.dePhmb > div > div.J0lOec").innerText`
 let timeOut = 500;
 const dec = new TextDecoder("utf-8");
 const enc = new TextEncoder();
@@ -25,7 +25,7 @@ chrome.webRequest.onBeforeRequest.addListener(function (details) {
 				raw: [{bytes: enc.encode(JSON.stringify(jsonData))}]
 			};
 		});*/
-		
+
 }, {
 	urls: ['*://*.smartcat.ai/api/Segments/*/SegmentTargets/*/Confirm*']
 }, ["requestBody", "blocking"]);
@@ -44,13 +44,14 @@ function getResult(sendResponse, smartcatTabId) {
 		chrome.tabs.executeScript({
 			code: getTranslationResultScript,
 		}, function(translationResult) {
+			console.log(translationResult)
 			handleCallback(sendResponse, translationResult);
 			chrome.tabs.update(smartcatTabId,{
 				active: true
 			}, function(){})
 		});
 	}, timeOut)
-	
+
 }
 
 function handleCallback(sendResponse, translationResult) {
@@ -81,7 +82,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse){
 			message.sourceLanguage, message.translatedLanguage, message.data
 		);
 		if (googleTranslateTab) {
-			timeOut = 500;
+			timeOut = 4000;
 			chrome.tabs.update(googleTranslateTab.id, {
 				active: true,
 				url
@@ -89,7 +90,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse){
 				getResult(sendResponse, currentTabId);
 			});
 		} else {
-			timeOut = 1500;
+			timeOut = 5000;
 			chrome.tabs.create({
 				url
 			}, function () {

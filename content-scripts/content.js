@@ -22,7 +22,7 @@ function getSelectedNode(node)
 {
 	if (!node)
 		return null;
-	if (node.className === 'l-content-view l-content-editor')
+	if (node.className === 'l-content-editor__view l-content-editor__view_editor')
 		return node;
 	return getSelectedNode(node.parentElement);
 }
@@ -44,10 +44,12 @@ function isSourceOrTarget(node) {
 }
 
 function setResult(result) {
+	if (!result)
+		return
 	const targetNode = $(parentOfCurrentNode).next();
-	const tmp = targetNode.find('.l-content-editor');
+	const tmp = targetNode.find('.l-content-editor__view');
 	tmp.html('');
-	tmp.append(`<span class="l-content-editor__text">${result}</span>`);
+	tmp.append(`<span class="l-content-editor__text">${result.trim()}</span>`);
 	it = setInterval(function() {
 		const confirmNode = targetNode.next();
 		let confirmTick = confirmNode.find('.l-segments__confirm-btn');
@@ -87,7 +89,7 @@ function handleNodeClick() {
 			setResult(result);
 		})
 	})
-	
+
 }
 
 setInterval(function(){
