@@ -5,11 +5,11 @@ function loadData() {
 		const appState = result[APP_STATE_KEY];
 		const value =  appState === APP_STATE_OFF ? false : true;
 		$('#switch')[0].checked = value;
-		
+
 		const sourceLanguage = result[sourceLanguageKey];
 		if (sourceLanguage)
 			$('#source-language').val(codeToLanguageMaps[sourceLanguage]);
-		
+
 		const translatedLanguage = result[translateLanguageKey];
 		if (translatedLanguage)
 			$('#translated-language').val(codeToLanguageMaps[translatedLanguage]);
@@ -22,13 +22,13 @@ function bindChange() {
 			[APP_STATE_KEY]: e.target.checked ? APP_STATE_ON : APP_STATE_OFF
 		})
 	};
-	
+
 	$('#source-language').change(function(event){
 		chrome.storage.local.set({
 			[sourceLanguageKey]: languageToCodeMaps[event.target.value]
 		});
 	});
-	
+
 	$('#translated-language').change(function(event){
 		const code = languageToCodeMaps[event.target.value];
 		if (code)
@@ -170,5 +170,4 @@ languageCodes.forEach(v => {
 	languageToCodeMaps[v[0]] = v[1];
 	codeToLanguageMaps[v[1]] = v[0];
 });
-
 

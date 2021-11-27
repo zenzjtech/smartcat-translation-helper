@@ -75,6 +75,7 @@ function handleNodeClick() {
 		}
 		selectText(currentNode);
 		document.execCommand('copy');
+		setResult(`<p style="color: orange">${WAITING_TEXT}</p>`)
 		chrome.runtime.sendMessage({
 			name: START_TRANSLATE,
 			data: currentNode.innerText,
