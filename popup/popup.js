@@ -40,11 +40,19 @@ function bindChange() {
 	})
 }
 
+function bootstrap() {
+	$('#support-btn').click(function() {
+		chrome.tabs.create({
+			url: 'https://www.facebook.com/groups/4576502349069441'
+		})
+	})
+}
 $(function(){
 	languageCodes.forEach(v => {
 		$('#source-language').append(`<option>${v[0]}</option>`);
 		$('#translated-language').append(`<option>${v[0]}</option>`);
 	});
+	bootstrap()
 	loadData();
 	bindChange();
 });
