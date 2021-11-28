@@ -1,6 +1,6 @@
 const getTranslationResultScript = `document.querySelector("#yDmH0d > c-wiz > div > div.WFnNle > c-wiz > div.OlSOob > c-wiz > div.ccvoYb > div.AxqVh > div.OPPzxe > c-wiz.P6w8m.BDJ8fb > div.dePhmb > div > div.J0lOec").innerText`
 let timeOut = 300;
-const maxRetries = 20
+const maxRetries = 30
 
 const script = () => `$.ajax({
   type: "POST",
