@@ -82,7 +82,6 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse){
 		currentWindow: true
 	}, function(tabs) {
 		let googleTranslateTab = tabs.find(tab => tab.url.includes('translate.google.com'))
-		const currentTabId = tabs.find(tab => tab.active === true).id;
 		const url = formGoogleTranslateUrl(
 			message.sourceLanguage, message.translatedLanguage, message.data
 		);
@@ -91,15 +90,17 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse){
 				googleTranslateTab.id
 				, {
 					url
+				}, function() {
+					// Safe time-out value in order to prevent the app from extracting previous result
+					setTimeout(function() {
+						getResult(sendResponse, googleTranslateTab.id);
+					}, 1000)
 				})
-			getResult(sendResponse, googleTranslateTab.id);
 		} else {
 			chrome.tabs.create({
-				url
+				url,
+				active: false
 			}, function (newTab) {
-				chrome.tabs.update(currentTabId, {
-					active: true
-				})
 				getResult(sendResponse, newTab.id);
 			})
 		}
